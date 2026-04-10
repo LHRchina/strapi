@@ -27,3 +27,16 @@ export interface ConfigSettings {
     defaultReplyTo: string;
   };
 }
+
+/** Shape of a stored dynamic email template record (plugin::email.email-template). */
+export interface EmailTemplateRecord {
+  id: number;
+  name: string;
+  displayName: string;
+  subject: string;
+  bodyHtml: string;
+  bodyText: string;
+  allowedVars: string[];
+  createdAt: string;
+  updatedAt: string;
+}

@@ -27,6 +27,19 @@ const admin: Plugin.Config.AdminInput = {
             })),
           permissions: PERMISSIONS.settings,
         },
+        {
+          intlLabel: {
+            id: 'email.SettingsNav.link.emailTemplates',
+            defaultMessage: 'Email templates',
+          },
+          id: 'email-templates',
+          to: 'email/templates',
+          Component: () =>
+            import('./pages/Templates').then((mod) => ({
+              default: mod.ProtectedEmailTemplatesPage,
+            })),
+          permissions: PERMISSIONS.readEmailTemplates,
+        },
       ]
     );
     app.registerPlugin({
