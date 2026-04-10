@@ -1,4 +1,5 @@
 import type { Plugin } from '@strapi/types';
+export type { EmailTemplateRecord } from '../../shared/types';
 
 export interface EmailConfig extends Record<string, unknown> {
   provider: string;
@@ -22,6 +23,7 @@ export interface EmailTemplateData {
     lastname: string;
     username: string;
   };
+  [key: string]: unknown;
 }
 
 export interface EmailOptions {
