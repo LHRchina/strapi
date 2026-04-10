@@ -70,6 +70,7 @@
   "Templates.notification.deleted": "Email template deleted",
   "Templates.notification.error": "An error occurred",
   "Templates.delete.confirm": "Are you sure you want to delete this template?",
+  "Templates.action.delete": "Delete template",
   "Templates.preview.title": "Preview template",
   "Templates.preview.field.sampleData": "Sample data (JSON)",
   "Templates.preview.field.sampleData.hint": "Enter a JSON object to render the template with",

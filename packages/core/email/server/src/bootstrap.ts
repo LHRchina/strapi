@@ -100,27 +100,30 @@ export const bootstrap = async ({ strapi }: { strapi: Core.Strapi }) => {
   // Install a global lifecycle subscriber that forwards events to the email-event service.
   // Individual plugins / bootstrap files can register handlers via:
   //   strapi.plugin('email').service('email-event').register(eventName, templateName, resolve)
+  const toEventPayload = (event: unknown): Record<string, unknown> =>
+    event as Record<string, unknown>;
+
   strapi.db.lifecycles.subscribe({
     async afterCreate(event) {
       const eventName = `${event.model.uid}.afterCreate`;
       await strapi
         .plugin('email')
         .service('email-event')
-        .dispatch(eventName, event as unknown as Record<string, unknown>);
+        .dispatch(eventName, toEventPayload(event));
     },
     async afterUpdate(event) {
       const eventName = `${event.model.uid}.afterUpdate`;
       await strapi
         .plugin('email')
         .service('email-event')
-        .dispatch(eventName, event as unknown as Record<string, unknown>);
+        .dispatch(eventName, toEventPayload(event));
     },
     async afterDelete(event) {
       const eventName = `${event.model.uid}.afterDelete`;
       await strapi
         .plugin('email')
         .service('email-event')
-        .dispatch(eventName, event as unknown as Record<string, unknown>);
+        .dispatch(eventName, toEventPayload(event));
     },
   });
 };

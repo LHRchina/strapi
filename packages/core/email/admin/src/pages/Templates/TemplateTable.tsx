@@ -117,7 +117,7 @@ const TemplateTable = ({
                 <IconButton
                   onClick={() => onDeleteClick(tpl)}
                   label={formatMessage({
-                    id: 'email.Templates.delete.confirm',
+                    id: 'email.Templates.action.delete',
                     defaultMessage: 'Delete template',
                   })}
                   variant="ghost"

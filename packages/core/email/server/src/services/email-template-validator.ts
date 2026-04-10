@@ -9,7 +9,7 @@ const { createStrictInterpolationRegExp, createLooseInterpolationRegExp } = temp
  *  - `${ ... }` JS string-interpolation syntax
  */
 const FORBIDDEN_PATTERNS = [
-  /<%(?!=)([\s\S]*?)%>/m,
+  /<%(?!%?=)([\s\S]*?)%>/m,
   /\${([^{}]*)}/m,
 ];
 
