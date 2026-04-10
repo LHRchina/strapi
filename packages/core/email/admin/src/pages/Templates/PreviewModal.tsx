@@ -224,14 +224,14 @@ const PreviewModal = ({ template, open, onToggle }: PreviewModalProps) => {
                       defaultMessage: 'HTML output',
                     })}
                   </Typography>
-                  {/* Sandboxed iframe prevents XSS */}
+                  {/* Sandboxed iframe prevents XSS – no allow-same-origin to isolate the rendered HTML */}
                   <Box
                     marginTop={2}
                     style={{ border: '1px solid #e0e0e0', borderRadius: 4, overflow: 'hidden' }}
                   >
                     <iframe
                       title="Email HTML preview"
-                      sandbox="allow-same-origin"
+                      sandbox=""
                       style={{ width: '100%', minHeight: 300, border: 'none' }}
                       srcDoc={preview.html}
                     />

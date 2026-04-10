@@ -1,7 +1,8 @@
 import * as React from 'react';
 
 import { Page, useNotification, useFetchClient, Layouts, useRBAC } from '@strapi/admin/strapi-admin';
-import { Button, Box } from '@strapi/design-system';
+import { ConfirmDialog } from '@strapi/admin/strapi-admin';
+import { Button, Box, Dialog } from '@strapi/design-system';
 import { Plus } from '@strapi/icons';
 import { useIntl } from 'react-intl';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
@@ -27,7 +28,9 @@ export const EmailTemplatesPage = () => {
 
   const [isFormOpen, setIsFormOpen] = React.useState(false);
   const [isPreviewOpen, setIsPreviewOpen] = React.useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = React.useState(false);
   const [selectedTemplate, setSelectedTemplate] = React.useState<EmailTemplateRecord | null>(null);
+  const [templateToDelete, setTemplateToDelete] = React.useState<EmailTemplateRecord | null>(null);
 
   const {
     isLoading: isLoadingPermissions,
@@ -153,10 +156,16 @@ export const EmailTemplatesPage = () => {
   };
 
   const handleDeleteClick = (template: EmailTemplateRecord) => {
-    // eslint-disable-next-line no-alert
-    if (window.confirm(formatMessage({ id: 'email.Templates.delete.confirm', defaultMessage: 'Are you sure you want to delete this template?' }))) {
-      deleteMutation.mutate(template.id);
+    setTemplateToDelete(template);
+    setIsDeleteDialogOpen(true);
+  };
+
+  const handleDeleteConfirm = () => {
+    if (templateToDelete) {
+      deleteMutation.mutate(templateToDelete.id);
     }
+    setIsDeleteDialogOpen(false);
+    setTemplateToDelete(null);
   };
 
   const handleFormSubmit = (values: {
@@ -249,6 +258,22 @@ export const EmailTemplatesPage = () => {
           setSelectedTemplate(null);
         }}
       />
+
+      <Dialog.Root open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <ConfirmDialog
+          onConfirm={handleDeleteConfirm}
+          onCancel={() => {
+            setIsDeleteDialogOpen(false);
+            setTemplateToDelete(null);
+          }}
+          variant="danger"
+        >
+          {formatMessage({
+            id: 'email.Templates.delete.confirm',
+            defaultMessage: 'Are you sure you want to delete this template?',
+          })}
+        </ConfirmDialog>
+      </Dialog.Root>
     </Page.Main>
   );
 };

@@ -5,11 +5,11 @@ const { createStrictInterpolationRegExp, createLooseInterpolationRegExp } = temp
 
 /**
  * Patterns that are unconditionally forbidden in a template body:
- *  - `<% ... %>` evaluation blocks (arbitrary JS execution)
+ *  - `<% ... %>` evaluation blocks (arbitrary JS execution) – must NOT match `<%= ... %>`
  *  - `${ ... }` JS string-interpolation syntax
  */
 const FORBIDDEN_PATTERNS = [
-  /<%[^=]([\s\S]*?)%>/m,
+  /<%(?!=)([\s\S]*?)%>/m,
   /\${([^{}]*)}/m,
 ];
 
@@ -26,6 +26,9 @@ const matchAll = (pattern: RegExp, src: string): string[] => {
 
   return results;
 };
+
+/** A regexp that deliberately never matches anything – used as a no-op interpolate pattern. */
+const NEVER_MATCH_REGEXP = /(?!x)x/;
 
 /**
  * Validate that a template body:
@@ -44,11 +47,11 @@ const isValidEmailTemplate = (body: string, allowedVars: string[]): boolean => {
   }
 
   // When there are no allowed vars the strict regexp would be empty and could cause a RegExp
-  // parse error. In that case we create a regexp that can never match.
+  // parse error. In that case we use a regexp that can never match.
   const strictRegExp =
     allowedVars.length > 0
       ? createStrictInterpolationRegExp(allowedVars, '')
-      : /(?!x)x/; // never matches
+      : NEVER_MATCH_REGEXP;
   const looseRegExp = createLooseInterpolationRegExp('');
 
   const strictMatches = matchAll(strictRegExp, body);
@@ -62,4 +65,4 @@ const isValidEmailTemplate = (body: string, allowedVars: string[]): boolean => {
   return true;
 };
 
-export { isValidEmailTemplate };
+export { isValidEmailTemplate, NEVER_MATCH_REGEXP };

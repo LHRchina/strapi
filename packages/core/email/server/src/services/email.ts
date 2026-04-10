@@ -1,7 +1,7 @@
 import * as _ from 'lodash';
 import { objects, template, errors } from '@strapi/utils';
 
-import { isValidEmailTemplate } from './email-template-validator';
+import { isValidEmailTemplate, NEVER_MATCH_REGEXP } from './email-template-validator';
 import type {
   EmailConfig,
   EmailOptions,
@@ -192,7 +192,7 @@ const renderTemplate = async (
   const interpolate =
     allowedVars.length > 0
       ? createStrictInterpolationRegExp(allowedVars, 'g')
-      : /(?!x)x/g;
+      : new RegExp(NEVER_MATCH_REGEXP, 'g');
 
   const render = (src: string): string => {
     try {
